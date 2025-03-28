@@ -1,494 +1,472 @@
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>Guia de Apoio - Exemplo</title>
-  <meta name="description" content="Guia de Apoio interativo que ajuda você a enxergar seus pensamentos de forma mais leve e transformá-los em experiências positivas." />
-  <meta name="keywords" content="Psicologia, Desfusão Cognitiva, Emoções, Pensamentos, Acolhimento" />
-  <meta name="author" content="richelmy murta, psicólogo clínico especialista em terapia cognitivo-comportamental" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  
-  <!-- Importa o GSAP para animações -->
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
-  
-  <style>
-    /* ===========================
-       VARIÁVEIS DE COR E LAYOUT
-    ============================ */
-    :root {
-      --bg-color: #1464D2;     /* Fundo principal (azul unificado) */
-      --card-bg: #ffffff;      /* Fundo dos cards */
-      --text-color: #333;      /* Texto principal */
-      --primary-color: #1464D2; 
-      --secondary-color: #0D4BA3;
-      --white: #fff;
-      --border-radius: 10px;
-      --transition-time: 0.6s;
-    }
-    
-    /* ===========================
-       RESET BÁSICO E FONTE
-    ============================ */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    html, body {
-      height: 100%;
-    }
-    body {
-      font-family: Arial, sans-serif;
-      background: var(--bg-color);
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-    
-    /* ===========================
-       CABEÇALHO
-    ============================ */
-    header {
-      width: 100%;
-      max-width: 900px;
-      margin: 1.5rem auto 0 auto;
-      background: var(--primary-color);
-      color: var(--white);
-      text-align: center;
-      padding: 1.5rem;
-      border-radius: 0 0 var(--border-radius) var(--border-radius);
-      box-shadow: none;
-    }
-    header h1 {
-      font-size: 1.5rem;
-      margin-bottom: 0.5rem;
-    }
-    #trophies-container {
-      display: flex;
-      justify-content: center;
-      gap: 5px;
-      margin-top: 0.3rem;
-    }
-    .trophy {
-      font-size: 1.3rem;
-    }
-    #encouragement-msg {
-      margin-top: 0.3rem;
-      font-size: 0.9rem;
-      color: var(--white);
-      font-style: italic;
-    }
-    
-    /* ===========================
-       CONTEÚDO PRINCIPAL
-    ============================ */
-    main {
-      flex: 1;
-      width: 100%;
-      max-width: 900px;
-      margin: 0 auto;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    
-    /* ===========================
-       SEÇÕES (PÁGINAS)
-    ============================ */
-    .page {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0.9);
-      width: 100%;
-      max-width: 600px;
-      background: var(--card-bg);
-      color: var(--text-color);
-      border-radius: var(--border-radius);
-      padding: 2rem;
-      box-shadow: none;
-      opacity: 0;
-      transition: transform var(--transition-time) ease, opacity var(--transition-time) ease;
-      z-index: 0;
-    }
-    .page.active {
-      transform: translate(-50%, -50%) scale(1);
-      opacity: 1;
-      z-index: 1;
-    }
-    /* Ajuste na splash para layout simétrico (usando flexbox + column) */
-    #splash {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-    
-    /* ===========================
-       CONTEÚDO INTERNO DAS PÁGINAS
-    ============================ */
-    .content {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      text-align: justify;
-      line-height: 1.4;
-    }
-    .content h2 {
-      font-size: 1.2rem;
-      text-align: center;
-    }
-    .content p {
-      font-size: 1rem;
-    }
-    
-    /* ===========================
-       BOTÕES (Voltar e Prosseguir)
-    ============================ */
-    .buttons {
-      display: flex;
-      gap: 1rem;
-      margin-top: 1.5rem;
-      justify-content: center;
-    }
-    .buttons button {
-      flex: 1;
-      max-width: 140px;
-      text-align: center;
-    }
-    button {
-      background: var(--primary-color);
-      color: var(--white);
-      border: none;
-      padding: 0.8rem 1rem;
-      border-radius: 8px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: transform 0.2s, background 0.3s ease;
-      box-shadow: none;
-    }
-    button:hover {
-      background: var(--secondary-color);
-    }
-    button:active {
-      transform: translateY(2px);
-    }
-    
-    /* ===========================
-       CAMPOS DE ENTRADA
-    ============================ */
-    input, textarea {
-      width: 100%;
-      padding: 0.8rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      outline: none;
-    }
-    
-    /* ===========================
-       GRID DE SENTIMENTOS
-    ============================ */
-    .feelings-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      gap: 0.5rem;
-      margin-top: 1rem;
-    }
-    .feeling-option {
-      background: #f7f7f7;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      padding: 0.5rem;
-      text-align: center;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    .feeling-option:hover {
-      background: #ebebeb;
-    }
-    .feeling-option.selected {
-      background: var(--primary-color);
-      color: var(--white);
-      border-color: var(--primary-color);
-    }
-    
-    /* ===========================
-       BOTÃO DE WHATSAPP (LANDING)
-    ============================ */
-    .whatsapp-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      background: #25D366;
-      border: none;
-      color: #fff;
-      font-size: 1rem;
-      font-weight: bold;
-      padding: 0.8rem 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    .whatsapp-button:hover {
-      background: #20c060;
-    }
-    .whatsapp-button:active {
-      transform: translateY(2px);
-    }
-    .whatsapp-button svg {
-      width: 1.2rem;
-      height: 1.2rem;
-      fill: #fff;
-    }
-    .buttons .whatsapp-button {
-      flex: 1;
-      max-width: 140px;
-      text-align: center;
-    }
-    
-    /* ===========================
-       RODAPÉ
-    ============================ */
-    footer {
-      width: 100%;
-      max-width: 900px;
-      margin: 0 auto;
-      background: var(--primary-color);
-      color: var(--white);
-      padding: 1rem 2rem;
-      font-size: 0.9rem;
-      text-align: center;
-      border-radius: var(--border-radius) var(--border-radius) 0 0;
-      box-shadow: none;
-    }
-    footer p {
-      margin: 0.5rem 0;
-      line-height: 1.4;
-    }
-    
-    /* ===========================
-       RESPONSIVIDADE
-    ============================ */
-    @media (max-width: 768px) {
-      header {
-        margin-top: 1rem;
-        padding: 1rem;
-      }
-      .page {
-        padding: 1rem;
-      }
-      .buttons {
-        flex-direction: row;
-      }
-    }
-  </style>
+	<meta charset="UTF-8" />
+	<title>Guia de Apoio - Exemplo</title>
+	<meta name="description" content="Guia de Apoio interativo que ajuda você a enxergar seus pensamentos de forma mais leve e transformá-los em experiências positivas." />
+	<meta name="keywords" content="Psicologia, Desfusão Cognitiva, Emoções, Pensamentos, Acolhimento" />
+	<meta name="author" content="richelmy murta, psicólogo clínico especialista em terapia cognitivo-comportamental" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<!-- Importa o GSAP para animações -->
+	<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+	<style>
+		/* ===========================
+		   VARIÁVEIS DE COR E LAYOUT
+		============================ */
+		:root {
+		  --bg-color: #1464D2;     /* Fundo principal (azul unificado) */
+		  --card-bg: #ffffff;      /* Fundo dos cards */
+		  --text-color: #333;      /* Texto principal */
+		  --primary-color: #1464D2; 
+		  --secondary-color: #0D4BA3;
+		  --white: #fff;
+		  --border-radius: 10px;
+		  --transition-time: 0.6s;
+		}
+		
+		/* ===========================
+		   RESET BÁSICO E FONTE
+		============================ */
+		* {
+		  margin: 0;
+		  padding: 0;
+		  box-sizing: border-box;
+		}
+		html, body {
+		  height: 100%;
+		}
+		body {
+		  font-family: Arial, sans-serif;
+		  background: var(--bg-color);
+		  display: flex;
+		  flex-direction: column;
+		  min-height: 100vh;
+		  overflow-x: hidden;
+		}
+		
+		/* ===========================
+		   CABEÇALHO
+		============================ */
+		header {
+		  width: 100%;
+		  max-width: 900px;
+		  margin: 1.5rem auto 0 auto;
+		  background: var(--primary-color);
+		  color: var(--white);
+		  text-align: center;
+		  padding: 1.5rem;
+		  border-radius: 0 0 var(--border-radius) var(--border-radius);
+		  box-shadow: none;
+		}
+		header h1 {
+		  font-size: 1.5rem;
+		  margin-bottom: 0.5rem;
+		}
+		#trophies-container {
+		  display: flex;
+		  justify-content: center;
+		  gap: 5px;
+		  margin-top: 0.3rem;
+		}
+		.trophy {
+		  font-size: 1.3rem;
+		}
+		#encouragement-msg {
+		  margin-top: 0.3rem;
+		  font-size: 0.9rem;
+		  color: var(--white);
+		  font-style: italic;
+		}
+		input[type="date"] {
+		  display: block;
+		}
+		
+		/* ===========================
+		   CONTEÚDO PRINCIPAL
+		============================ */
+		main {
+		  flex: 1;
+		  width: 100%;
+		  max-width: 900px;
+		  margin: 0 auto;
+		  position: relative;
+		  display: flex;
+		  justify-content: center;
+		  align-items: center;
+		}
+		
+		/* ===========================
+		   SEÇÕES (PÁGINAS)
+		============================ */
+		.page {
+		  position: absolute;
+		  top: 50%;
+		  left: 50%;
+		  transform: translate(-50%, -50%) scale(0.9);
+		  width: 100%;
+		  max-width: 600px;
+		  background: var(--card-bg);
+		  color: var(--text-color);
+		  border-radius: var(--border-radius);
+		  padding: 2rem;
+		  box-shadow: none;
+		  opacity: 0;
+		  transition: transform var(--transition-time) ease, opacity var(--transition-time) ease;
+		  z-index: 0;
+		}
+		.page.active {
+		  transform: translate(-50%, -50%) scale(1);
+		  opacity: 1;
+		  z-index: 1;
+		}
+		/* Ajuste na splash para layout simétrico (usando flexbox + column) */
+		#splash {
+		  display: flex;
+		  flex-direction: column;
+		  justify-content: center;
+		  align-items: center;
+		}
+		
+		/* ===========================
+		   CONTEÚDO INTERNO DAS PÁGINAS
+		============================ */
+		.content {
+		  display: flex;
+		  flex-direction: column;
+		  gap: 1rem;
+		  text-align: justify;
+		  line-height: 1.4;
+		}
+		.content h2 {
+		  font-size: 1.2rem;
+		  text-align: center;
+		}
+		.content p {
+		  font-size: 1rem;
+		}
+		
+		/* ===========================
+		   BOTÕES (Voltar e Prosseguir)
+		============================ */
+		.buttons {
+		  display: flex;
+		  gap: 1rem;
+		  margin-top: 1.5rem;
+		  justify-content: center;
+		}
+		.buttons button {
+		  flex: 1;
+		  max-width: 140px;
+		  text-align: center;
+		}
+		button {
+		  background: var(--primary-color);
+		  color: var(--white);
+		  border: none;
+		  padding: 0.8rem 1rem;
+		  border-radius: 8px;
+		  font-size: 1rem;
+		  cursor: pointer;
+		  transition: transform 0.2s, background 0.3s ease;
+		  box-shadow: none;
+		}
+		button:hover {
+		  background: var(--secondary-color);
+		}
+		button:active {
+		  transform: translateY(2px);
+		}
+		
+		/* ===========================
+		   CAMPOS DE ENTRADA
+		============================ */
+		input, textarea {
+		  width: 100%;
+		  padding: 0.8rem;
+		  font-size: 1rem;
+		  border: 1px solid #ccc;
+		  border-radius: 4px;
+		  outline: none;
+		}
+		
+		/* ===========================
+		   GRID DE SENTIMENTOS
+		============================ */
+		.feelings-grid {
+		  display: grid;
+		  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+		  gap: 0.5rem;
+		  margin-top: 1rem;
+		}
+		.feeling-option {
+		  background: #f7f7f7;
+		  border-radius: 4px;
+		  border: 1px solid #ccc;
+		  padding: 0.5rem;
+		  text-align: center;
+		  cursor: pointer;
+		  transition: background 0.3s ease;
+		}
+		.feeling-option:hover {
+		  background: #ebebeb;
+		}
+		.feeling-option.selected {
+		  background: var(--primary-color);
+		  color: var(--white);
+		  border-color: var(--primary-color);
+		}
+		
+		/* ===========================
+		   BOTÃO DE WHATSAPP (LANDING)
+		============================ */
+		.whatsapp-button {
+		  display: inline-flex;
+		  align-items: center;
+		  justify-content: center;
+		  gap: 0.5rem;
+		  background: #25D366;
+		  border: none;
+		  color: #fff;
+		  font-size: 1rem;
+		  font-weight: bold;
+		  padding: 0.8rem 1rem;
+		  border-radius: 8px;
+		  cursor: pointer;
+		  transition: background 0.3s ease;
+		}
+		.whatsapp-button:hover {
+		  background: #20c060;
+		}
+		.whatsapp-button:active {
+		  transform: translateY(2px);
+		}
+		.whatsapp-button svg {
+		  width: 1.2rem;
+		  height: 1.2rem;
+		  fill: #fff;
+		}
+		.buttons .whatsapp-button {
+		  flex: 1;
+		  max-width: 140px;
+		  text-align: center;
+		}
+		
+		/* ===========================
+		   RODAPÉ
+		============================ */
+		footer {
+		  width: 100%;
+		  max-width: 900px;
+		  margin: 0 auto;
+		  background: var(--primary-color);
+		  color: var(--white);
+		  padding: 1rem 2rem;
+		  font-size: 0.9rem;
+		  text-align: center;
+		  border-radius: var(--border-radius) var(--border-radius) 0 0;
+		  box-shadow: none;
+		}
+		footer p {
+		  margin: 0.5rem 0;
+		  line-height: 1.4;
+		}
+		
+		/* ===========================
+		   RESPONSIVIDADE
+		============================ */
+		@media (max-width: 768px) {
+		  header {
+		    margin-top: 1rem;
+		    padding: 1rem;
+		  }
+		  .page {
+		    padding: 1rem;
+		  }
+		  .buttons {
+		    flex-direction: row;
+		  }
+		}
+	</style>
 </head>
+
 <body>
-  <!-- CABEÇALHO -->
-  <header>
-    <h1>Guia de Apoio</h1>
-    <div id="trophies-container"></div>
-    <div id="encouragement-msg"></div>
-  </header>
-  
-  <!-- CONTEÚDO PRINCIPAL -->
-  <main>
-    <!-- SPLASH (exibido por 2 segundos) -->
-    <section id="splash" class="page active">
-      <div class="content">
-        <h2>Bem-vindo(a) ao Guia de Apoio</h2>
-        <p>Aguarde.....</p>
-      </div>
-    </section>
-    
-    <!-- ONBOARDING 1 -->
-    <section id="onb1" class="page">
-      <div class="content">
-        <h2>Bem-vindo(a)!</h2>
-        <p>
-          Este guia ajuda você a ver seus pensamentos de forma mais leve, como simples eventos da mente.
-        </p>
-        <div class="buttons">
-          <button class="skip-button" data-next="step1">Pular</button>
-          <button class="next-button" data-next="onb2">Próximo</button>
-        </div>
-      </div>
-    </section>
-    
-    <!-- ONBOARDING 2 -->
-    <section id="onb2" class="page">
-      <div class="content">
-        <h2>O que você encontrará?</h2>
-        <p>
-          Orientações e exemplos práticos para transformar seus pensamentos e facilitar o seu dia.
-        </p>
-        <div class="buttons">
-          <button class="skip-button" data-next="step1">Pular</button>
-          <button class="next-button" data-next="onb3">Próximo</button>
-        </div>
-      </div>
-    </section>
-    
-    <!-- ONBOARDING 3 -->
-    <section id="onb3" class="page">
-      <div class="content">
-        <h2>Pronto para começar?</h2>
-        <p>
-          Aprenda a observar seus pensamentos sem se identificar com eles e melhore sua forma de lidar com desafios.
-        </p>
-        <div class="buttons">
-          <button class="skip-button" data-next="step1">Pular</button>
-          <button class="next-button" data-next="onb4">Próximo</button>
-        </div>
-      </div>
-    </section>
-    
-    <!-- ONBOARDING 4 -->
-    <section id="onb4" class="page">
-      <div class="content">
-        <h2>Vamos lá!</h2>
-        <p>
-          Iniciaremos o exercício. Siga as instruções e descubra como transformar sua relação com os pensamentos.
-        </p>
-        <div class="buttons">
-          <button class="skip-button" data-next="step1">Pular</button>
-          <button class="next-button" data-next="step1">Próximo</button>
-        </div>
-      </div>
-    </section>
-    
-    <!-- EXERCÍCIO (ABA 1) - APENAS NOME E DATA -->
-    <section id="step1" class="page">
-      <div class="content">
-        <h2>Identificação</h2>
-        <p>Por favor, insira seu nome e a data de hoje para iniciarmos.</p>
-        <input id="user-name" type="text" placeholder="Seu primeiro nome..." />
-        <input id="user-date" type="date" />
-        <div class="buttons">
-          <button data-next="step2">Prosseguir</button>
-        </div>
-      </div>
-    </section>
-    
-    <!-- EXERCÍCIO (ABA 2) - SENTIMENTOS -->
-    <section id="step2" class="page">
-      <div class="content">
-        <h2>Como você está se sentindo?</h2>
-        <p>Selecione as emoções que melhor representam o seu estado atual.</p>
-        <div class="feelings-grid" id="feelings-grid"></div>
-        <div class="buttons">
-          <button data-previous="step1">Voltar</button>
-          <button data-next="step3">Prosseguir</button>
-        </div>
-      </div>
-    </section>
-    
-    <!-- EXERCÍCIO (ABA 3) - PENSAMENTO -->
-    <section id="step3" class="page">
-      <div class="content">
-        <h2>O que passa pela sua cabeça agora?</h2>
-        <p>Reflita sobre o que está ocupando sua mente agora e descreva abaixo – não se refira apenas aos sentimentos, mas ao julgamento que você faz de si mesmo ou de alguma situação. Escreva de forma clara, natural e objetiva.</p>
-        <textarea id="patient-thought" placeholder="Digite aqui o que você julga sobre si ou sobre a situação..."></textarea>
-        <div class="buttons">
-          <button data-previous="step2">Voltar</button>
-          <button data-next="step4">Prosseguir</button>
-        </div>
-      </div>
-    </section>
-    
-    <!-- EXERCÍCIO (ABA 4) - POR QUE PENSO ASSIM? -->
-    <section id="step4" class="page">
-      <div class="content">
-        <h2>Por que penso assim?</h2>
-        <p id="distortions-info"></p>
-        <p id="distortion-extra"></p>
-        <div class="buttons">
-          <button data-previous="step3">Voltar</button>
-          <button data-next="step5">Prosseguir</button>
-        </div>
-      </div>
-    </section>
-    
-    <!-- EXERCÍCIO (ABA 5) - PENSAMENTO ALTERNATIVO -->
-    <section id="step5" class="page">
-      <div class="content">
-        <h2>Pensamento Funcional</h2>
-        <p id="functional-thought"></p>
-        <!-- Removido o extra, fica só o pensamento funcional -->
-        <div class="buttons">
-          <button data-previous="step4">Voltar</button>
-          <button data-next="step6">Prosseguir</button>
-        </div>
-      </div>
-    </section>
-    
-    <!-- EXERCÍCIO (ABA 6) - DESFUSÃO COGNITIVA -->
-    <section id="step6" class="page">
-      <div class="content">
-        <h2>Desfusão Cognitiva</h2>
-        <p id="defusion-text"></p>
-        <div class="buttons">
-          <button data-previous="step5">Voltar</button>
-          <button data-next="step7">Prosseguir</button>
-        </div>
-      </div>
-    </section>
-    
-    <!-- EXERCÍCIO (ABA 7) - EXERCÍCIO PROPOSTO -->
-    <section id="step7" class="page">
-      <div class="content">
-        <h2>Exercício Proposto</h2>
-        <p id="exercise-info"></p>
-        <p id="exercise-extra"></p>
-        <div class="buttons">
-          <button data-previous="step6">Voltar</button>
-          <button data-next="step8">Prosseguir</button>
-        </div>
-      </div>
-    </section>
-    
-    <!-- EXERCÍCIO (ABA 8) - CUIDADO E APOIO -->
-    <section id="step8" class="page">
-      <div class="content">
-        <h2>Cuidado e Apoio</h2>
-        <p id="encouragement-info"></p>
-        <p id="encouragement-extra"></p>
-        <div class="buttons">
-          <button data-previous="step7">Voltar</button>
-          <button data-next="step9">Prosseguir</button>
-        </div>
-      </div>
-    </section>
-    
-    <!-- EXERCÍCIO (ABA 9) - ENCERRAMENTO -->
-    <section id="step9" class="page">
-      <div class="content">
-        <h2>Encerramento</h2>
-        <p id="closing-text"></p>
-        <div class="buttons">
-          <button data-previous="step8">Voltar</button>
-          <button data-next="landing">Prosseguir</button>
-        </div>
-      </div>
-    </section>
-    
-    <!-- LANDING (FINAL) -->
-    <section id="landing" class="page">
-      <div class="content">
-        <h2>Compartilhe algo comigo</h2>
-        <p style="text-align: justify;">
-          Se desejar, escreva algo que queira compartilhar neste momento. Ao clicar no botão abaixo, você será redirecionado(a) ao WhatsApp para enviar sua mensagem.
-        </p>
-        <textarea id="final-message" placeholder="Digite aqui o que deseja compartilhar..."></textarea>
-        <div class="buttons" style="justify-content: center;">
-          <button data-previous="step9">Voltar</button>
-          <button id="sendWhatsApp" data-next="send" class="whatsapp-button">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="width:1.2rem; height:1.2rem; fill:#fff;">
-              <path d="M380.9 97.1C339 55.2 283.5 32 224 32 100.3 32 0 132.3 0 256c0 45.9 
+	<!-- CABEÇALHO -->
+	<header>
+		<h1>Guia de Apoio</h1>
+		<div id="trophies-container"></div>
+		<div id="encouragement-msg"></div>
+	</header>
+	<!-- CONTEÚDO PRINCIPAL -->
+	<main>
+		<!-- SPLASH (exibido por 2 segundos) -->
+		<section id="splash" class="page active">
+			<div class="content">
+				<h2>Bem-vindo(a) ao Guia de Apoio</h2>
+				<p>Aguarde.....</p>
+			</div>
+		</section>
+		<!-- ONBOARDING 1 -->
+		<section id="onb1" class="page">
+			<div class="content">
+				<h2>Bem-vindo(a)!</h2>
+				<p> Este guia ajuda você a ver seus pensamentos de forma mais leve, como simples eventos da mente. </p>
+				<div class="buttons">
+					<button class="skip-button" data-next="step1">Pular</button>
+					<button class="next-button" data-next="onb2">Próximo</button>
+				</div>
+			</div>
+		</section>
+		<!-- ONBOARDING 2 -->
+		<section id="onb2" class="page">
+			<div class="content">
+				<h2>O que você encontrará?</h2>
+				<p> Orientações e exemplos práticos para transformar seus pensamentos e facilitar o seu dia. </p>
+				<div class="buttons">
+					<button class="skip-button" data-next="step1">Pular</button>
+					<button class="next-button" data-next="onb3">Próximo</button>
+				</div>
+			</div>
+		</section>
+		<!-- ONBOARDING 3 -->
+		<section id="onb3" class="page">
+			<div class="content">
+				<h2>Pronto para começar?</h2>
+				<p> Aprenda a observar seus pensamentos sem se identificar com eles e melhore sua forma de lidar com desafios. </p>
+				<div class="buttons">
+					<button class="skip-button" data-next="step1">Pular</button>
+					<button class="next-button" data-next="onb4">Próximo</button>
+				</div>
+			</div>
+		</section>
+		<!-- ONBOARDING 4 -->
+		<section id="onb4" class="page">
+			<div class="content">
+				<h2>Vamos lá!</h2>
+				<p> Iniciaremos o exercício. Siga as instruções e descubra como transformar sua relação com os pensamentos. </p>
+				<div class="buttons">
+					<button class="skip-button" data-next="step1">Pular</button>
+					<button class="next-button" data-next="step1">Próximo</button>
+				</div>
+			</div>
+		</section>
+		<!-- EXERCÍCIO (ABA 1) - APENAS NOME E DATA -->
+		<section id="step1" class="page">
+			<div class="content">
+				<h2>Identificação</h2>
+				<p>Por favor, insira seu nome e a data de hoje para iniciarmos.</p>
+				<input id="user-name" type="text" placeholder="Seu primeiro nome..." />
+				<input id="user-date" type="date" />
+				<div class="buttons">
+					<button data-next="step2">Prosseguir</button>
+				</div>
+			</div>
+		</section>
+		<!-- EXERCÍCIO (ABA 2) - SENTIMENTOS -->
+		<section id="step2" class="page">
+			<div class="content">
+				<h2>Como você está se sentindo?</h2>
+				<p>Selecione as emoções que melhor representam o seu estado atual.</p>
+				<div class="feelings-grid" id="feelings-grid"></div>
+				<div class="buttons">
+					<button data-previous="step1">Voltar</button>
+					<button data-next="step3">Prosseguir</button>
+				</div>
+			</div>
+		</section>
+		<!-- EXERCÍCIO (ABA 3) - PENSAMENTO -->
+		<section id="step3" class="page">
+			<div class="content">
+				<h2>O que passa pela sua cabeça agora?</h2>
+				<p>Reflita sobre o que está ocupando sua mente agora e descreva abaixo – não se refira apenas aos sentimentos, mas ao julgamento que você faz de si mesmo ou de alguma situação. Escreva de forma clara, natural e objetiva.</p>
+				<textarea id="patient-thought" placeholder="Digite aqui o que você julga sobre si ou sobre a situação..."></textarea>
+				<div class="buttons">
+					<button data-previous="step2">Voltar</button>
+					<button data-next="step4">Prosseguir</button>
+				</div>
+			</div>
+		</section>
+		<!-- EXERCÍCIO (ABA 4) - POR QUE PENSO ASSIM? -->
+		<section id="step4" class="page">
+			<div class="content">
+				<h2>Por que penso assim?</h2>
+				<p id="distortions-info"></p>
+				<p id="distortion-extra"></p>
+				<div class="buttons">
+					<button data-previous="step3">Voltar</button>
+					<button data-next="step5">Prosseguir</button>
+				</div>
+			</div>
+		</section>
+		<!-- EXERCÍCIO (ABA 5) - PENSAMENTO ALTERNATIVO -->
+		<section id="step5" class="page">
+			<div class="content">
+				<h2>Pensamento Funcional</h2>
+				<p id="functional-thought"></p>
+				<!-- Removido o extra, fica só o pensamento funcional -->
+				<div class="buttons">
+					<button data-previous="step4">Voltar</button>
+					<button data-next="step6">Prosseguir</button>
+				</div>
+			</div>
+		</section>
+		<!-- EXERCÍCIO (ABA 6) - DESFUSÃO COGNITIVA -->
+		<section id="step6" class="page">
+			<div class="content">
+				<h2>Desfusão Cognitiva</h2>
+				<p id="defusion-text"></p>
+				<div class="buttons">
+					<button data-previous="step5">Voltar</button>
+					<button data-next="step7">Prosseguir</button>
+				</div>
+			</div>
+		</section>
+		<!-- EXERCÍCIO (ABA 7) - EXERCÍCIO PROPOSTO -->
+		<section id="step7" class="page">
+			<div class="content">
+				<h2>Exercício Proposto</h2>
+				<p id="exercise-info"></p>
+				<p id="exercise-extra"></p>
+				<div class="buttons">
+					<button data-previous="step6">Voltar</button>
+					<button data-next="step8">Prosseguir</button>
+				</div>
+			</div>
+		</section>
+		<!-- EXERCÍCIO (ABA 8) - CUIDADO E APOIO -->
+		<section id="step8" class="page">
+			<div class="content">
+				<h2>Cuidado e Apoio</h2>
+				<p id="encouragement-info"></p>
+				<p id="encouragement-extra"></p>
+				<div class="buttons">
+					<button data-previous="step7">Voltar</button>
+					<button data-next="step9">Prosseguir</button>
+				</div>
+			</div>
+		</section>
+		<!-- EXERCÍCIO (ABA 9) - ENCERRAMENTO -->
+		<section id="step9" class="page">
+			<div class="content">
+				<h2>Encerramento</h2>
+				<p id="closing-text"></p>
+				<div class="buttons">
+					<button data-previous="step8">Voltar</button>
+					<button data-next="landing">Prosseguir</button>
+				</div>
+			</div>
+		</section>
+		<!-- LANDING (FINAL) -->
+		<section id="landing" class="page">
+			<div class="content">
+				<h2>Compartilhe algo comigo</h2>
+				<p style="text-align: justify;"> Se desejar, escreva algo que queira compartilhar neste momento. Ao clicar no botão abaixo, você será redirecionado(a) ao WhatsApp para enviar sua mensagem. </p>
+				<textarea id="final-message" placeholder="Digite aqui o que deseja compartilhar..."></textarea>
+				<div class="buttons" style="justify-content: center;">
+					<button data-previous="step9">Voltar</button>
+					<button id="sendWhatsApp" data-next="send" class="whatsapp-button">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="width:1.2rem; height:1.2rem; fill:#fff;">
+							<path d="M380.9 97.1C339 55.2 283.5 32 224 32 100.3 32 0 132.3 0 256c0 45.9 
             12 90.1 34.7 129.6L0 480l94.3-34.7C132.9 500 177.1 512 224 512c123.7 0 
             224-100.3 224-224 0-59.5-23.2-115-65.1-157.9zM224 464c-41.3 0-81-10.1-116.2-29
             l-8.2-4.8-55.9 20.6L72 394.2c-19.8-23.2-30.2-53.1-30.2-84.2 0-92.6 75.4-168 
@@ -500,379 +478,375 @@
             -12.5-9.8-3.2-.2-6.8-.2-10.4-.2s-9.6 1.4-14.6 6.8c-5 5.5-19.1 18.7-19.1 45.4 
             0 26.8 19.5 52.7 22.2 56.3 2.7 3.6 38.8 59.3 94.1 82.9 13.2 5.7 23.5 9.1 
             31.6 11.6 13.2 3.9 25.2 3.4 34.8 2.1 10.6-1.4 32.7-13.4 37.3-26.4 4.5-13.2 
-            4.5-24.5 3.2-26.4-1.3-1.8-5-2.7-10.5-4.4z"/>
-            </svg>
-            Enviar
-          </button>
-          <!-- Botão Concluir para fechar o aplicativo -->
-          <button id="closeApp">Concluir</button>
-        </div>
-      </div>
-    </section>
-  </main>
-  
-  <footer>
-    <p>Richelmy Murta, Psicólogo Clínico Especialista em Terapia Cognitivo-Comportamental</p>
-    <p>® Todos os direitos reservados</p>
-  </footer>
-  
- <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
-<script type="module">
-document.addEventListener("DOMContentLoaded", () => {
-localStorage.removeItem('guiaApoioRespostas');
+            4.5-24.5 3.2-26.4-1.3-1.8-5-2.7-10.5-4.4z" />
+						</svg> Enviar </button>
+					<!-- Botão Concluir para fechar o aplicativo -->
+					<button id="closeApp">Concluir</button>
+				</div>
+			</div>
+		</section>
+	</main>
+	<footer>
+		<p>Richelmy Murta, Psicólogo Clínico Especialista em Terapia Cognitivo-Comportamental</p>
+		<p>® Todos os direitos reservados</p>
+	</footer>
+	<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+	<script type="module">
+		document.addEventListener("DOMContentLoaded", () => {
+		localStorage.removeItem('guiaApoioRespostas');
+		
+		  /*
+		    Fluxo:
+		    1) splash (some após 2s)
+		    2) onb1, onb2, onb3, onb4 (Onboarding)
+		    3) step1 (nome e data)
+		    4) step2 (sentimentos)
+		    5) step3 (pensamento)
+		    6) step4 (por que penso assim?)
+		    7) step5 (pensamento funcional)
+		    8) step6 (desfusão cognitiva)
+		    9) step7 (exercício proposto)
+		    10) step8 (cuidado e apoio)
+		    11) step9 (encerramento)
+		    12) landing (WhatsApp)
+		  */
+		
+		  // Elementos e variáveis principais
+		  const pages = document.querySelectorAll('.page');
+		  const trophiesContainer = document.getElementById('trophies-container');
+		  const encouragementMsg = document.getElementById('encouragement-msg');
+		  const sendWhatsAppBtn = document.getElementById('sendWhatsApp');
+		  const finalMessageInput = document.getElementById('final-message');
+		
+		  // Após a página carregar, esperamos 2 segundos e mudamos para "onb1"
+		  setTimeout(() => {
+		    showPage('onb1');
+		  }, 2000);
+		
+		  // Objeto de respostas – inclui campos para armazenar textos das abas
+		  const responses = {
+		    name: "",
+		    date: "",
+		    feelings: [],
+		    thought: "",
+		    distortionText: "",
+		    distortionExtra: "",
+		    functionalText: "",
+		    functionalExtra: "",
+		    defusionDisplayed: false, 
+		    exerciseText: "",
+		    exerciseExtra: "",
+		    encouragementText: "",
+		    encouragementExtra: "",
+		    closingTextStored: ""
+		  };
+		
+		  // Função para extrair o primeiro nome
+		  const getFirstName = () => {
+		    return responses.name ? responses.name.trim().split(" ")[0] : "você";
+		  };
+		
+		  // Carregar e salvar dados no localStorage
+		  const loadResponses = () => {
+		    const saved = localStorage.getItem('guiaApoioRespostas');
+		    if (saved) Object.assign(responses, JSON.parse(saved));
+		  };
+		  const saveResponses = () => {
+		    localStorage.setItem('guiaApoioRespostas', JSON.stringify(responses));
+		  };
+		  loadResponses();
+		
+		  // Animação de transição com GSAP
+		  const showPage = (id) => {
+		    const nextPage = document.getElementById(id);
+		    const currentActive = document.querySelector('.page.active');
+		  
+		    if (currentActive && currentActive !== nextPage) {
+		      gsap.to(currentActive, {
+		        opacity: 0,
+		        scale: 0.9,
+		        duration: 0.4,
+		        onComplete: () => {
+		          currentActive.classList.remove('active');
+		          nextPage.classList.add('active');
+		          gsap.fromTo(
+		            nextPage,
+		            { opacity: 0, scale: 0.9 },
+		            { opacity: 1, scale: 1, duration: 0.5, ease: "power2.out" }
+		          );
+		        }
+		      });
+		    } else {
+		      nextPage.classList.add('active');
+		      gsap.fromTo(
+		        nextPage,
+		        { opacity: 0, scale: 0.9 },
+		        { opacity: 1, scale: 1, duration: 0.5, ease: "power2.out" }
+		      );
+		    }
+		  
+		    // Ajusta o texto se for step4..step9
+		    handlePageContent(id);
+		  };
+		
+		  // Handler para voltar (botões "Voltar")
+		  document.querySelectorAll('button[data-previous]').forEach(btn => {
+		    btn.addEventListener('click', () => {
+		      const prevPageId = btn.dataset.previous;
+		      showPage(prevPageId);
+		    });
+		  });
+		
+		  // Configuração da seleção de emoções – 12 emoções negativas comuns
+		  const feelingsList = [
+		    { label: "Tristeza", emoji: "😢" },
+		    { label: "Ansiedade", emoji: "😟" },
+		    { label: "Medo", emoji: "😨" },
+		    { label: "Pânico", emoji: "😰" },
+		    { label: "Desespero", emoji: "😭" },
+		    { label: "Culpa", emoji: "😞" },
+		    { label: "Vergonha", emoji: "😳" },
+		    { label: "Raiva", emoji: "😠" },
+		    { label: "Confusão", emoji: "😕" },
+		    { label: "Solidão", emoji: "😔" },
+		    { label: "Desânimo", emoji: "😩" },
+		    { label: "Irritação", emoji: "😡" }
+		  ];
+		  const feelingsGrid = document.getElementById('feelings-grid');
+		  if (feelingsGrid) {
+		    feelingsList.forEach(feeling => {
+		      const div = document.createElement('div');
+		      div.classList.add('feeling-option');
+		      div.textContent = `${feeling.emoji} ${feeling.label}`;
+		      div.dataset.value = feeling.label;
+		      div.addEventListener('click', () => {
+		        div.classList.toggle('selected');
+		        if (div.classList.contains('selected')) {
+		          if (!responses.feelings.includes(feeling.label)) {
+		            responses.feelings.push(feeling.label);
+		          }
+		        } else {
+		          responses.feelings = responses.feelings.filter(f => f !== feeling.label);
+		        }
+		        saveResponses();
+		      });
+		      feelingsGrid.appendChild(div);
+		    });
+		  }
+		
+		  // Gera ou exibe o conteúdo de cada aba (step4..step9)
+		  const handlePageContent = (id) => {
+		    switch (id) {
+		      case 'step4': {
+		        addTrophy('step4');
+		        if (!responses.distortionText) {
+		          // 5 textos alternativos, cada um iniciando com o nome do paciente + explicação
+		          const distortionsOptions = [
+		            `${getFirstName()}, na maioria das vezes, este pensamento que você teve resulta de uma distorção cognitiva. Elas surgem de crenças e vivências passadas que alteram nossa percepção dos fatos. Um exemplo é a supergeneralização: Às vezes, supergeneralizamos um evento negativo, ampliando suas consequências de maneira exagerada, e passamos a enxergar todas as situações de forma extremamente pessimista e limitante.`,
+		            `${getFirstName()}, na maioria das vezes, este pensamento que você teve resulta de uma distorção cognitiva. Elas se originam de interpretações automáticas que nem sempre refletem a realidade. Um exemplo é a personalização: Podemos cair na personalização, assumindo responsabilidades por acontecimentos que estão fora do nosso controle e interpretando cada detalhe como se fosse exclusivamente nossa culpa, mesmo quando não o é.`,
+		            `${getFirstName()}, na maioria das vezes, este pensamento que você teve resulta de uma distorção cognitiva. Elas podem surgir quando nos baseamos em pressupostos pouco fundamentados. Um exemplo é a leitura mental: A leitura mental ocorre quando presumimos saber o que os outros pensam, formando conclusões precipitadas e equivocadas que distorcem a realidade e prejudicam nossa comunicação.`,
+		            `${getFirstName()}, na maioria das vezes, este pensamento que você teve resulta de uma distorção cognitiva. Geralmente, ela aparece quando tememos desfechos ruins sem considerar outras possibilidades. Um exemplo é a catastrofização: Ela transforma pequenos problemas em grandes ameaças, fazendo-nos acreditar que situações adversas terão consequências devastadoras, mesmo quando isso não corresponde à realidade.`,
+		            `${getFirstName()}, na maioria das vezes, este pensamento que você teve resulta de uma distorção cognitiva. Essas distorções se reforçam quando nos concentramos apenas no lado negativo. Um exemplo é a filtragem mental: Focamos somente nos aspectos negativos de uma experiência, ignorando sistematicamente qualquer elemento positivo que possa existir, o que agrava nossa visão
+		distorcida da realidade.`
+		          ];
+		          responses.distortionText =
+		            distortionsOptions[Math.floor(Math.random() * distortionsOptions.length)];
+		          // Sem frase adicional
+		          responses.distortionExtra = "";
+		          saveResponses();
+		        }
+		        document.getElementById('distortions-info').textContent = responses.distortionText;
+		        document.getElementById('distortion-extra').textContent = responses.distortionExtra;
+		        break;
+		      }
+		      case 'step5': {
+		        addTrophy('step5');
+		        if (!responses.functionalText) {
+		          // 10 exemplos de frases iniciais
+		          const functionalExamples = [
+		            "Estou tendo um pensamento que: ",
+		            "Percebo que minha mente formulou a ideia de: ",
+		            "Reconheço um pensamento que diz: ",
+		            "Identifico agora um pensamento que afirma: ",
+		            "Dou-me conta de um pensamento que expressa: ",
+		            "Surgiu em minha mente a seguinte possibilidade: ",
+		            "Notei a presença de um pensamento indicando: ",
+		            "Verifico que minha mente sugeriu a ideia de: ",
+		            "Observo um pensamento que descreve: ",
+		            "Percebo neste instante um pensamento que aponta: "
+		          ];
+		          const randomIntro = functionalExamples[Math.floor(Math.random() * functionalExamples.length)];
+		          responses.functionalText = randomIntro + responses.thought;
+		          // Nesta aba fica somente o pensamento funcional
+		          responses.functionalExtra = "";
+		          saveResponses();
+		        }
+		        document.getElementById('functional-thought').textContent = responses.functionalText;
+		        break;
+		      }
+		      case 'step6': {
+		        addTrophy('step6');
+		        if (!responses.defusionDisplayed) {
+		          const defusionText = `Então, ${getFirstName()}, a desfusão cognitiva permite enxergar os pensamentos como meros eventos transitórios da mente, ampliando a percepção de que eles não definem a realidade e, assim, reduzindo significativamente seu impacto emocional e mental.`;
+		          document.getElementById('defusion-text').textContent = defusionText;
+		          responses.defusionDisplayed = true;
+		          saveResponses();
+		        } else {
+		          document.getElementById('defusion-text').textContent = `Então, ${getFirstName()}, a desfusão cognitiva permite enxergar os pensamentos como meros eventos transitórios da mente, ampliando a percepção de que eles não definem a realidade e, assim, reduzindo significativamente seu impacto emocional e mental.`;
+		        }
+		        break;
+		      }
+		      case 'step7': {
+		        addTrophy('step7');
+		        if (!responses.exerciseText) {
+		          // 10 propostas de 40 palavras, cada começando com "Neste caso, {name}, seria importante você fazer..."
+		          const exerciseProposals = [
+		            `Neste caso, ${getFirstName()}, seria importante você fazer: Exercício - Reconhecendo Pensamentos. Reserve cinco minutos para escrever seu pensamento. Em seguida, identifique a emoção presente e reflita sobre possíveis interpretações. Isso funciona pois amplia sua perspectiva e reduz a intensidade emocional.`,
+		            `Neste caso, ${getFirstName()}, seria importante você fazer: Exercício - Caminhada Atenta. Durante três minutos, caminhe lentamente, notando cada passo. Observe o contato dos pés com o chão. Isso funciona pois envolve o presente, reduzindo pensamentos automáticos e promovendo tranquilidade profunda.`,
+		            `Neste caso, ${getFirstName()}, seria importante você fazer: Exercício - Respiração Consciente. Feche os olhos e inspire lentamente, sentindo o ar preencher seus pulmões. Expire devagar, liberando tensões. Esse processo reduz a reatividade mental e amplia a percepção de calma interior.`,
+		            `Neste caso, ${getFirstName()}, seria importante você fazer: Exercício - Rotulando Pensamentos. Quando surgir uma ideia perturbadora, rotule-a como preocupação ou lembrança, sem se aprofundar. Esse método separa você do conteúdo mental, aliviando pressões e fortalecendo a capacidade de observar neutralmente.`,
+		            `Neste caso, ${getFirstName()}, seria importante você fazer: Exercício - Diário de Conquistas. Anote diariamente algo positivo que realizou ou enfrentou, descrevendo como se sentiu. Essa prática realça aspectos construtivos da rotina, auxiliando a contrabalançar pensamentos limitantes e nutrir motivação interna.`,
+		            `Neste caso, ${getFirstName()}, seria importante você fazer: Exercício - Visualização Serena. Feche os olhos e imagine um cenário, como uma praia ou campo florido. Observe detalhes aromas. Isso ameniza preocupações, estimula sensações positivas e reorienta a atenção para o presente.`,
+		            `Neste caso, ${getFirstName()}, seria importante você fazer: Exercício - Reestruturação de Significados. Escolha um pensamento negativo recorrente e escreva versões alternativas, buscando um ponto de vista menos rígido. Isso reduz a sobrecarga e ajuda a enxergar possibilidades que pareciam inacessíveis.`,
+		            `Neste caso, ${getFirstName()}, seria importante você fazer: Exercício - Afirmações Positivas. Formule declarações construtivas, como “Eu sou capaz de enfrentar desafios.” Repita-as diariamente, fortalecendo a crença em suas habilidades. Esse processo substitui pensamentos automáticos negativos por visões mais confiantes equilibradas.`,
+		            `Neste caso, ${getFirstName()}, seria importante você fazer: Exercício - Observando Emoções. Feche os olhos e tente identificar onde sente cada emoção no corpo. Reconheça sensações físicas sem julgá-las. Esse método aumenta a compreensão emocional e evita reações impulsivas mais intensas.`,
+		            `Neste caso, ${getFirstName()}, seria importante você fazer: Exercício - Acolhendo Pensamentos. Sente-se confortavelmente e permita que cada pensamento surja sem tentar bloqueá-lo. Apenas reconheça sua presença e deixe-o partir. Isso reduz o apego às preocupações, gerando flexibilidade e estabilidade mental.`
+		          ];
+		          responses.exerciseText =
+		            exerciseProposals[Math.floor(Math.random() * exerciseProposals.length)];
+		          responses.exerciseExtra = "";
+		          saveResponses();
+		        }
+		        document.getElementById('exercise-info').textContent = responses.exerciseText;
+		        document.getElementById('exercise-extra').textContent = responses.exerciseExtra;
+		        break;
+		      }
+		      case 'step8': {
+		        addTrophy('step8');
+		        if (!responses.encouragementText) {
+		          // 5 textos de 40 palavras, cada iniciando com o nome do paciente
+		          const encouragementsArray = [
+		            `{name}, reconhecer suas conquistas é essencial para manter a motivação. Cada passo dado fortalece sua coragem e desperta possibilidades. A confiança nasce quando você percebe o próprio valor. Continue firme, pois seu processo de crescimento é único e merece celebração.`,
+		            `{name}, seu empenho reflete um compromisso genuíno com o próprio bem-estar. Ao encarar desafios com serenidade, você fortalece a resiliência. Aprender a valorizar cada vitória, por menor que seja, aumenta a segurança interna. Acredite em si, pois há enorme potencial.`,
+		            `{name}, cada passo dado em direção ao autoconhecimento mostra sua determinação. Mesmo as pequenas conquistas devem ser celebradas, pois constroem alicerces para mudanças duradouras. A vida se transforma quando acolhemos nossas vulnerabilidades. Confie nesse processo e permita-se avançar com coragem.`,
+		            `{name}, valorize cada instante de superação, pois é nesse movimento que descobrimos nossa força interior. Pequenos esforços resultam em mudanças. Aprender a respeitar o próprio ritmo garante uma evolução sólida. Continue acreditando em seu potencial e mantendo foco nos objetivos.`,
+		            `{name}, reconhecer limites e aceitar desafios faz parte de um caminho saudável. Ao permitir-se crescer, você expande horizontes e aprende a lidar com dificuldades. Tenha paciência consigo, celebrando cada etapa. Assim, constrói uma base firme para enfrentar qualquer adversidade futura.`
+		          ];
+		          const randomEncouragement =
+		            encouragementsArray[Math.floor(Math.random() * encouragementsArray.length)];
+		          // Substitui {name} pelo primeiro nome
+		          responses.encouragementText = randomEncouragement.replace("{name}", getFirstName());
+		          responses.encouragementExtra = "";
+		          saveResponses();
+		        }
+		        document.getElementById('encouragement-info').textContent = responses.encouragementText;
+		        document.getElementById('encouragement-extra').textContent = responses.encouragementExtra;
+		        break;
+		      }
+		      case 'step9': {
+		        addTrophy('step9');
+		        if (!responses.closingTextStored) {
+		          const closingText =
+		            "Muito bem, {name}! Você concluiu esta etapa do Guia de Apoio. Esperamos que as reflexões e exercícios tenham lhe proporcionado novas perspectivas. Lembre-se: o autoconhecimento é um processo contínuo e você pode revisitar estes passos sempre que desejar.";
+		          responses.closingTextStored = closingText.replace("{name}", getFirstName());
+		          saveResponses();
+		        }
+		        document.getElementById('closing-text').textContent = responses.closingTextStored;
+		        break;
+		      }
+		      default:
+		        break;
+		    }
+		  };
+		
+		  // Função para adicionar troféu e mensagem de incentivo
+		  const addTrophy = (step) => {
+		    if (!trophiesContainer.querySelector(`[data-step="${step}"]`)) {
+		      const trophy = document.createElement('span');
+		      trophy.classList.add('trophy');
+		      trophy.setAttribute('data-step', step);
+		      trophy.textContent = '⭐';
+		      trophiesContainer.appendChild(trophy);
+		
+		      const encouragements = [
+		        "Continue assim, {name}!",
+		        "Ótimo progresso, {name}!",
+		        "Você está indo muito bem, {name}!",
+		        "Excelente, {name}!",
+		        "Parabéns pelo avanço, {name}!"
+		      ];
+		      const randomMsg = encouragements[Math.floor(Math.random() * encouragements.length)];
+		      encouragementMsg.textContent = randomMsg.replace("{name}", getFirstName());
+		    }
+		  };
+		
+		  // Botões de navegação "Prosseguir"
+		  document.querySelectorAll('button[data-next]').forEach(btn => {
+		    btn.addEventListener('click', () => {
+		      const currentPageId = btn.closest('.page').id;
+		      const nextPageId = btn.dataset.next;
+		
+		      // Validações obrigatórias
+		      if (currentPageId === 'step1') {
+		        const userName = document.getElementById('user-name').value.trim();
+		        const userDate = document.getElementById('user-date').value;
+		        if (!userName || !userDate) {
+		          alert("Por favor, preencha seu nome e a data.");
+		          return;
+		        }
+		        responses.name = userName;
+		        responses.date = userDate;
+		        saveResponses();
+		        addTrophy('step1');
+		      }
+		      if (currentPageId === 'step2') {
+		        if (responses.feelings.length === 0) {
+		          alert("Por favor, selecione pelo menos uma emoção.");
+		          return;
+		        }
+		        addTrophy('step2');
+		      }
+		      if (currentPageId === 'step3') {
+		        const thought = document.getElementById('patient-thought').value.trim();
+		        if (!thought) {
+		          alert("Por favor, descreva seu pensamento principal.");
+		          return;
+		        }
+		        responses.thought = thought;
+		        saveResponses();
+		        addTrophy('step3');
+		      }
+		
+		      showPage(nextPageId);
+		    });
+		  });
+		
+		  // Botões de navegação "Voltar"
+		  document.querySelectorAll('button[data-previous]').forEach(btn => {
+		    btn.addEventListener('click', () => {
+		      const prevPageId = btn.dataset.previous;
+		      showPage(prevPageId);
+		    });
+		  });
+		
+		  // Envio via WhatsApp na landing final
+		  if (sendWhatsAppBtn && finalMessageInput) {
+		    sendWhatsAppBtn.addEventListener('click', () => {
+		      const userMessage = finalMessageInput.value.trim() || "Olá, gostaria de compartilhar algo...";
+		      const encodedMsg = encodeURIComponent(`Oi, sou ${getFirstName()}. ${userMessage}`);
+		      window.open(`https://wa.me/5535984640729?text=${encodedMsg}`, '_blank');
+		    });
+		  }
+		
+		  // Botão "Concluir" para fechar o aplicativo
+		  const closeAppBtn = document.getElementById('closeApp');
+		  if (closeAppBtn) {
+		    closeAppBtn.addEventListener('click', () => {
+		      window.close();
+		    });
+		  }
+		});
+	</script>
+</body>
 
-  /*
-    Fluxo:
-    1) splash (some após 2s)
-    2) onb1, onb2, onb3, onb4 (Onboarding)
-    3) step1 (nome e data)
-    4) step2 (sentimentos)
-    5) step3 (pensamento)
-    6) step4 (por que penso assim?)
-    7) step5 (pensamento funcional)
-    8) step6 (desfusão cognitiva)
-    9) step7 (exercício proposto)
-    10) step8 (cuidado e apoio)
-    11) step9 (encerramento)
-    12) landing (WhatsApp)
-  */
-
-  // Elementos e variáveis principais
-  const pages = document.querySelectorAll('.page');
-  const trophiesContainer = document.getElementById('trophies-container');
-  const encouragementMsg = document.getElementById('encouragement-msg');
-  const sendWhatsAppBtn = document.getElementById('sendWhatsApp');
-  const finalMessageInput = document.getElementById('final-message');
-
-  // Após a página carregar, esperamos 2 segundos e mudamos para "onb1"
-  setTimeout(() => {
-    showPage('onb1');
-  }, 2000);
-
-  // Objeto de respostas – inclui campos para armazenar textos das abas
-  const responses = {
-    name: "",
-    date: "",
-    feelings: [],
-    thought: "",
-    distortionText: "",
-    distortionExtra: "",
-    functionalText: "",
-    functionalExtra: "",
-    defusionDisplayed: false, 
-    exerciseText: "",
-    exerciseExtra: "",
-    encouragementText: "",
-    encouragementExtra: "",
-    closingTextStored: ""
-  };
-
-  // Função para extrair o primeiro nome
-  const getFirstName = () => {
-    return responses.name ? responses.name.trim().split(" ")[0] : "você";
-  };
-
-  // Carregar e salvar dados no localStorage
-  const loadResponses = () => {
-    const saved = localStorage.getItem('guiaApoioRespostas');
-    if (saved) Object.assign(responses, JSON.parse(saved));
-  };
-  const saveResponses = () => {
-    localStorage.setItem('guiaApoioRespostas', JSON.stringify(responses));
-  };
-  loadResponses();
-
-  // Animação de transição com GSAP
-  const showPage = (id) => {
-    const nextPage = document.getElementById(id);
-    const currentActive = document.querySelector('.page.active');
-  
-    if (currentActive && currentActive !== nextPage) {
-      gsap.to(currentActive, {
-        opacity: 0,
-        scale: 0.9,
-        duration: 0.4,
-        onComplete: () => {
-          currentActive.classList.remove('active');
-          nextPage.classList.add('active');
-          gsap.fromTo(
-            nextPage,
-            { opacity: 0, scale: 0.9 },
-            { opacity: 1, scale: 1, duration: 0.5, ease: "power2.out" }
-          );
-        }
-      });
-    } else {
-      nextPage.classList.add('active');
-      gsap.fromTo(
-        nextPage,
-        { opacity: 0, scale: 0.9 },
-        { opacity: 1, scale: 1, duration: 0.5, ease: "power2.out" }
-      );
-    }
-  
-    // Ajusta o texto se for step4..step9
-    handlePageContent(id);
-  };
-
-  // Handler para voltar (botões "Voltar")
-  document.querySelectorAll('button[data-previous]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const prevPageId = btn.dataset.previous;
-      showPage(prevPageId);
-    });
-  });
-
-  // Configuração da seleção de emoções – 12 emoções negativas comuns
-  const feelingsList = [
-    { label: "Tristeza", emoji: "😢" },
-    { label: "Ansiedade", emoji: "😟" },
-    { label: "Medo", emoji: "😨" },
-    { label: "Pânico", emoji: "😰" },
-    { label: "Desespero", emoji: "😭" },
-    { label: "Culpa", emoji: "😞" },
-    { label: "Vergonha", emoji: "😳" },
-    { label: "Raiva", emoji: "😠" },
-    { label: "Confusão", emoji: "😕" },
-    { label: "Solidão", emoji: "😔" },
-    { label: "Desânimo", emoji: "😩" },
-    { label: "Irritação", emoji: "😡" }
-  ];
-  const feelingsGrid = document.getElementById('feelings-grid');
-  if (feelingsGrid) {
-    feelingsList.forEach(feeling => {
-      const div = document.createElement('div');
-      div.classList.add('feeling-option');
-      div.textContent = `${feeling.emoji} ${feeling.label}`;
-      div.dataset.value = feeling.label;
-      div.addEventListener('click', () => {
-        div.classList.toggle('selected');
-        if (div.classList.contains('selected')) {
-          if (!responses.feelings.includes(feeling.label)) {
-            responses.feelings.push(feeling.label);
-          }
-        } else {
-          responses.feelings = responses.feelings.filter(f => f !== feeling.label);
-        }
-        saveResponses();
-      });
-      feelingsGrid.appendChild(div);
-    });
-  }
-
-  // Gera ou exibe o conteúdo de cada aba (step4..step9)
-  const handlePageContent = (id) => {
-    switch (id) {
-      case 'step4': {
-        addTrophy('step4');
-        if (!responses.distortionText) {
-          // 5 textos alternativos, cada um iniciando com o nome do paciente + explicação
-          const distortionsOptions = [
-            `${getFirstName()}, na maioria das vezes, este pensamento que você teve resulta de uma distorção cognitiva. Elas surgem de crenças e vivências passadas que alteram nossa percepção dos fatos. Um exemplo é a supergeneralização: Às vezes, supergeneralizamos um evento negativo, ampliando suas consequências de maneira exagerada, e passamos a enxergar todas as situações de forma extremamente pessimista e limitante.`,
-            `${getFirstName()}, na maioria das vezes, este pensamento que você teve resulta de uma distorção cognitiva. Elas se originam de interpretações automáticas que nem sempre refletem a realidade. Um exemplo é a personalização: Podemos cair na personalização, assumindo responsabilidades por acontecimentos que estão fora do nosso controle e interpretando cada detalhe como se fosse exclusivamente nossa culpa, mesmo quando não o é.`,
-            `${getFirstName()}, na maioria das vezes, este pensamento que você teve resulta de uma distorção cognitiva. Elas podem surgir quando nos baseamos em pressupostos pouco fundamentados. Um exemplo é a leitura mental: A leitura mental ocorre quando presumimos saber o que os outros pensam, formando conclusões precipitadas e equivocadas que distorcem a realidade e prejudicam nossa comunicação.`,
-            `${getFirstName()}, na maioria das vezes, este pensamento que você teve resulta de uma distorção cognitiva. Geralmente, ela aparece quando tememos desfechos ruins sem considerar outras possibilidades. Um exemplo é a catastrofização: Ela transforma pequenos problemas em grandes ameaças, fazendo-nos acreditar que situações adversas terão consequências devastadoras, mesmo quando isso não corresponde à realidade.`,
-            `${getFirstName()}, na maioria das vezes, este pensamento que você teve resulta de uma distorção cognitiva. Essas distorções se reforçam quando nos concentramos apenas no lado negativo. Um exemplo é a filtragem mental: Focamos somente nos aspectos negativos de uma experiência, ignorando sistematicamente qualquer elemento positivo que possa existir, o que agrava nossa visão
-distorcida da realidade.`
-          ];
-          responses.distortionText =
-            distortionsOptions[Math.floor(Math.random() * distortionsOptions.length)];
-          // Sem frase adicional
-          responses.distortionExtra = "";
-          saveResponses();
-        }
-        document.getElementById('distortions-info').textContent = responses.distortionText;
-        document.getElementById('distortion-extra').textContent = responses.distortionExtra;
-        break;
-      }
-      case 'step5': {
-        addTrophy('step5');
-        if (!responses.functionalText) {
-          // 10 exemplos de frases iniciais
-          const functionalExamples = [
-            "Estou tendo um pensamento que: ",
-            "Percebo que minha mente formulou a ideia de: ",
-            "Reconheço um pensamento que diz: ",
-            "Identifico agora um pensamento que afirma: ",
-            "Dou-me conta de um pensamento que expressa: ",
-            "Surgiu em minha mente a seguinte possibilidade: ",
-            "Notei a presença de um pensamento indicando: ",
-            "Verifico que minha mente sugeriu a ideia de: ",
-            "Observo um pensamento que descreve: ",
-            "Percebo neste instante um pensamento que aponta: "
-          ];
-          const randomIntro = functionalExamples[Math.floor(Math.random() * functionalExamples.length)];
-          responses.functionalText = randomIntro + responses.thought;
-          // Nesta aba fica somente o pensamento funcional
-          responses.functionalExtra = "";
-          saveResponses();
-        }
-        document.getElementById('functional-thought').textContent = responses.functionalText;
-        break;
-      }
-      case 'step6': {
-        addTrophy('step6');
-        if (!responses.defusionDisplayed) {
-          const defusionText = `Então, ${getFirstName()}, a desfusão cognitiva permite enxergar os pensamentos como meros eventos transitórios da mente, ampliando a percepção de que eles não definem a realidade e, assim, reduzindo significativamente seu impacto emocional e mental.`;
-          document.getElementById('defusion-text').textContent = defusionText;
-          responses.defusionDisplayed = true;
-          saveResponses();
-        } else {
-          document.getElementById('defusion-text').textContent = `Então, ${getFirstName()}, a desfusão cognitiva permite enxergar os pensamentos como meros eventos transitórios da mente, ampliando a percepção de que eles não definem a realidade e, assim, reduzindo significativamente seu impacto emocional e mental.`;
-        }
-        break;
-      }
-      case 'step7': {
-        addTrophy('step7');
-        if (!responses.exerciseText) {
-          // 10 propostas de 40 palavras, cada começando com "Neste caso, {name}, seria importante você fazer..."
-          const exerciseProposals = [
-            `Neste caso, ${getFirstName()}, seria importante você fazer: Exercício - Reconhecendo Pensamentos. Reserve cinco minutos para escrever seu pensamento. Em seguida, identifique a emoção presente e reflita sobre possíveis interpretações. Isso funciona pois amplia sua perspectiva e reduz a intensidade emocional.`,
-            `Neste caso, ${getFirstName()}, seria importante você fazer: Exercício - Caminhada Atenta. Durante três minutos, caminhe lentamente, notando cada passo. Observe o contato dos pés com o chão. Isso funciona pois envolve o presente, reduzindo pensamentos automáticos e promovendo tranquilidade profunda.`,
-            `Neste caso, ${getFirstName()}, seria importante você fazer: Exercício - Respiração Consciente. Feche os olhos e inspire lentamente, sentindo o ar preencher seus pulmões. Expire devagar, liberando tensões. Esse processo reduz a reatividade mental e amplia a percepção de calma interior.`,
-            `Neste caso, ${getFirstName()}, seria importante você fazer: Exercício - Rotulando Pensamentos. Quando surgir uma ideia perturbadora, rotule-a como preocupação ou lembrança, sem se aprofundar. Esse método separa você do conteúdo mental, aliviando pressões e fortalecendo a capacidade de observar neutralmente.`,
-            `Neste caso, ${getFirstName()}, seria importante você fazer: Exercício - Diário de Conquistas. Anote diariamente algo positivo que realizou ou enfrentou, descrevendo como se sentiu. Essa prática realça aspectos construtivos da rotina, auxiliando a contrabalançar pensamentos limitantes e nutrir motivação interna.`,
-            `Neste caso, ${getFirstName()}, seria importante você fazer: Exercício - Visualização Serena. Feche os olhos e imagine um cenário, como uma praia ou campo florido. Observe detalhes aromas. Isso ameniza preocupações, estimula sensações positivas e reorienta a atenção para o presente.`,
-            `Neste caso, ${getFirstName()}, seria importante você fazer: Exercício - Reestruturação de Significados. Escolha um pensamento negativo recorrente e escreva versões alternativas, buscando um ponto de vista menos rígido. Isso reduz a sobrecarga e ajuda a enxergar possibilidades que pareciam inacessíveis.`,
-            `Neste caso, ${getFirstName()}, seria importante você fazer: Exercício - Afirmações Positivas. Formule declarações construtivas, como “Eu sou capaz de enfrentar desafios.” Repita-as diariamente, fortalecendo a crença em suas habilidades. Esse processo substitui pensamentos automáticos negativos por visões mais confiantes equilibradas.`,
-            `Neste caso, ${getFirstName()}, seria importante você fazer: Exercício - Observando Emoções. Feche os olhos e tente identificar onde sente cada emoção no corpo. Reconheça sensações físicas sem julgá-las. Esse método aumenta a compreensão emocional e evita reações impulsivas mais intensas.`,
-            `Neste caso, ${getFirstName()}, seria importante você fazer: Exercício - Acolhendo Pensamentos. Sente-se confortavelmente e permita que cada pensamento surja sem tentar bloqueá-lo. Apenas reconheça sua presença e deixe-o partir. Isso reduz o apego às preocupações, gerando flexibilidade e estabilidade mental.`
-          ];
-          responses.exerciseText =
-            exerciseProposals[Math.floor(Math.random() * exerciseProposals.length)];
-          responses.exerciseExtra = "";
-          saveResponses();
-        }
-        document.getElementById('exercise-info').textContent = responses.exerciseText;
-        document.getElementById('exercise-extra').textContent = responses.exerciseExtra;
-        break;
-      }
-      case 'step8': {
-        addTrophy('step8');
-        if (!responses.encouragementText) {
-          // 5 textos de 40 palavras, cada iniciando com o nome do paciente
-          const encouragementsArray = [
-            `{name}, reconhecer suas conquistas é essencial para manter a motivação. Cada passo dado fortalece sua coragem e desperta possibilidades. A confiança nasce quando você percebe o próprio valor. Continue firme, pois seu processo de crescimento é único e merece celebração.`,
-            `{name}, seu empenho reflete um compromisso genuíno com o próprio bem-estar. Ao encarar desafios com serenidade, você fortalece a resiliência. Aprender a valorizar cada vitória, por menor que seja, aumenta a segurança interna. Acredite em si, pois há enorme potencial.`,
-            `{name}, cada passo dado em direção ao autoconhecimento mostra sua determinação. Mesmo as pequenas conquistas devem ser celebradas, pois constroem alicerces para mudanças duradouras. A vida se transforma quando acolhemos nossas vulnerabilidades. Confie nesse processo e permita-se avançar com coragem.`,
-            `{name}, valorize cada instante de superação, pois é nesse movimento que descobrimos nossa força interior. Pequenos esforços resultam em mudanças. Aprender a respeitar o próprio ritmo garante uma evolução sólida. Continue acreditando em seu potencial e mantendo foco nos objetivos.`,
-            `{name}, reconhecer limites e aceitar desafios faz parte de um caminho saudável. Ao permitir-se crescer, você expande horizontes e aprende a lidar com dificuldades. Tenha paciência consigo, celebrando cada etapa. Assim, constrói uma base firme para enfrentar qualquer adversidade futura.`
-          ];
-          const randomEncouragement =
-            encouragementsArray[Math.floor(Math.random() * encouragementsArray.length)];
-          // Substitui {name} pelo primeiro nome
-          responses.encouragementText = randomEncouragement.replace("{name}", getFirstName());
-          responses.encouragementExtra = "";
-          saveResponses();
-        }
-        document.getElementById('encouragement-info').textContent = responses.encouragementText;
-        document.getElementById('encouragement-extra').textContent = responses.encouragementExtra;
-        break;
-      }
-      case 'step9': {
-        addTrophy('step9');
-        if (!responses.closingTextStored) {
-          const closingText =
-            "Muito bem, {name}! Você concluiu esta etapa do Guia de Apoio. Esperamos que as reflexões e exercícios tenham lhe proporcionado novas perspectivas. Lembre-se: o autoconhecimento é um processo contínuo e você pode revisitar estes passos sempre que desejar.";
-          responses.closingTextStored = closingText.replace("{name}", getFirstName());
-          saveResponses();
-        }
-        document.getElementById('closing-text').textContent = responses.closingTextStored;
-        break;
-      }
-      default:
-        break;
-    }
-  };
-
-  // Função para adicionar troféu e mensagem de incentivo
-  const addTrophy = (step) => {
-    if (!trophiesContainer.querySelector(`[data-step="${step}"]`)) {
-      const trophy = document.createElement('span');
-      trophy.classList.add('trophy');
-      trophy.setAttribute('data-step', step);
-      trophy.textContent = '⭐';
-      trophiesContainer.appendChild(trophy);
-
-      const encouragements = [
-        "Continue assim, {name}!",
-        "Ótimo progresso, {name}!",
-        "Você está indo muito bem, {name}!",
-        "Excelente, {name}!",
-        "Parabéns pelo avanço, {name}!"
-      ];
-      const randomMsg = encouragements[Math.floor(Math.random() * encouragements.length)];
-      encouragementMsg.textContent = randomMsg.replace("{name}", getFirstName());
-    }
-  };
-
-  // Botões de navegação "Prosseguir"
-  document.querySelectorAll('button[data-next]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const currentPageId = btn.closest('.page').id;
-      const nextPageId = btn.dataset.next;
-
-      // Validações obrigatórias
-      if (currentPageId === 'step1') {
-        const userName = document.getElementById('user-name').value.trim();
-        const userDate = document.getElementById('user-date').value;
-        if (!userName || !userDate) {
-          alert("Por favor, preencha seu nome e a data.");
-          return;
-        }
-        responses.name = userName;
-        responses.date = userDate;
-        saveResponses();
-        addTrophy('step1');
-      }
-      if (currentPageId === 'step2') {
-        if (responses.feelings.length === 0) {
-          alert("Por favor, selecione pelo menos uma emoção.");
-          return;
-        }
-        addTrophy('step2');
-      }
-      if (currentPageId === 'step3') {
-        const thought = document.getElementById('patient-thought').value.trim();
-        if (!thought) {
-          alert("Por favor, descreva seu pensamento principal.");
-          return;
-        }
-        responses.thought = thought;
-        saveResponses();
-        addTrophy('step3');
-      }
-
-      showPage(nextPageId);
-    });
-  });
-
-  // Botões de navegação "Voltar"
-  document.querySelectorAll('button[data-previous]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const prevPageId = btn.dataset.previous;
-      showPage(prevPageId);
-    });
-  });
-
-  // Envio via WhatsApp na landing final
-  if (sendWhatsAppBtn && finalMessageInput) {
-    sendWhatsAppBtn.addEventListener('click', () => {
-      const userMessage = finalMessageInput.value.trim() || "Olá, gostaria de compartilhar algo...";
-      const encodedMsg = encodeURIComponent(`Oi, sou ${getFirstName()}. ${userMessage}`);
-      window.open(`https://wa.me/5535984640729?text=${encodedMsg}`, '_blank');
-    });
-  }
-
-  // Botão "Concluir" para fechar o aplicativo
-  const closeAppBtn = document.getElementById('closeApp');
-  if (closeAppBtn) {
-    closeAppBtn.addEventListener('click', () => {
-      window.close();
-    });
-  }
-});
-</script>
-</body> 
 </html>
-
