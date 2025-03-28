@@ -8,6 +8,7 @@
 	<meta name="keywords" content="Psicologia, Desfusão Cognitiva, Emoções, Pensamentos, Acolhimento" />
 	<meta name="author" content="richelmy murta, psicólogo clínico especialista em terapia cognitivo-comportamental" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
 	<!-- Importa o GSAP para animações -->
 	<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
 	<style>
@@ -356,7 +357,7 @@
 				<h2>Identificação</h2>
 				<p>Por favor, insira seu nome e a data de hoje para iniciarmos.</p>
 				<input id="user-name" type="text" placeholder="Seu primeiro nome..." />
-				<input id="user-date" type="date" />
+				<input id="user-date" type="text" placeholder="dd/mm/aaaa" />
 				<div class="buttons">
 					<button data-next="step2">Prosseguir</button>
 				</div>
@@ -847,6 +848,16 @@
 		  }
 		});
 	</script>
+<!-- No final do body: Importa o script do flatpickr -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    flatpickr("#user-date", {
+      dateFormat: "d/m/Y"
+    });
+  });
+</script>
+
 </body>
 
 </html>
