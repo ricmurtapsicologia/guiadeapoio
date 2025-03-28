@@ -8,7 +8,7 @@
 	<meta name="keywords" content="Psicologia, Desfusão Cognitiva, Emoções, Pensamentos, Acolhimento" />
 	<meta name="author" content="richelmy murta, psicólogo clínico especialista em terapia cognitivo-comportamental" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
 	<!-- Importa o GSAP para animações -->
 	<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
 	<style>
@@ -665,16 +665,16 @@
 		        if (!responses.functionalText) {
 		          // 10 exemplos de frases iniciais
 		          const functionalExamples = [
-		            "Estou tendo um pensamento que: ",
-		            "Percebo que minha mente formulou a ideia de: ",
-		            "Reconheço um pensamento que diz: ",
-		            "Identifico agora um pensamento que afirma: ",
-		            "Dou-me conta de um pensamento que expressa: ",
-		            "Surgiu em minha mente a seguinte possibilidade: ",
-		            "Notei a presença de um pensamento indicando: ",
-		            "Verifico que minha mente sugeriu a ideia de: ",
-		            "Observo um pensamento que descreve: ",
-		            "Percebo neste instante um pensamento que aponta: "
+		            "Notei que surge um pensamento: ",
+		            "Percebo que minha mente gera a ideia de: ",
+		            "Reconheço um pensamento que surge: ",
+		            "Identifico agora um pensamento que aparece: ",
+		            "Dou-me conta de um pensamento que emerge: ",
+		            "Surgiu em minha mente a possibilidade de: ",
+		            "Notei a presença de um pensamento indicativo: ",
+		            "Verifico que minha mente cria a ideia de: ",
+		            "Observo um pensamento que aparece: ",
+		            "Percebo neste instante um pensamento que destaca: "
 		          ];
 		          const randomIntro = functionalExamples[Math.floor(Math.random() * functionalExamples.length)];
 		          responses.functionalText = randomIntro + responses.thought;
@@ -848,16 +848,15 @@
 		  }
 		});
 	</script>
-<!-- No final do body: Importa o script do flatpickr -->
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    flatpickr("#user-date", {
-      dateFormat: "d/m/Y"
-    });
-  });
-</script>
-
+	<!-- No final do body: Importa o script do flatpickr -->
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+		  flatpickr("#user-date", {
+		    dateFormat: "d/m/Y"
+		  });
+		});
+	</script>
 </body>
 
 </html>
